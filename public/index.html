@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Query Generator — AI</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🗄️</text></svg>">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="hdr-inner">
+    <div class="logo">
+      <span>🗄️</span>
+      <div>
+        <div class="logo-title">SQL Query Generator</div>
+        <div class="logo-sub">Natural language → SQL · Powered by Claude AI</div>
+      </div>
+    </div>
+    <a href="https://github.com/szmsk/sql-query-gen" target="_blank" class="gh-btn">GitHub ↗</a>
+  </div>
+</header>
+
+<div class="app-grid">
+
+  <!-- ── LEFT: Schema explorer ── -->
+  <aside class="schema-panel">
+    <div class="panel-hdr">DATABASE SCHEMA</div>
+    <div class="schema-desc">Clinical Trials Demo DB · SQLite</div>
+    <div id="schemaTree" class="schema-tree"></div>
+    <div class="panel-hdr" style="margin-top:16px">EXAMPLE QUESTIONS</div>
+    <div id="exampleList" class="example-list"></div>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main-panel">
+
+    <!-- API Key -->
+    <div class="api-bar">
+      <span class="api-label">🔑 API KEY</span>
+      <div class="api-row">
+        <input type="password" id="apiKey" placeholder="sk-ant-..." autocomplete="off" spellcheck="false">
+        <button class="icon-btn" onclick="toggleKey()">👁</button>
+      </div>
+      <span class="api-hint">Get key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a> · First $5 free</span>
+    </div>
+
+    <!-- Question input -->
+    <div class="question-block">
+      <div class="q-label">ASK IN PLAIN ENGLISH</div>
+      <div class="q-row">
+        <textarea id="questionInput"
+          placeholder="e.g. How many patients are enrolled in each trial?"
+          rows="2"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"></textarea>
+        <button class="gen-btn" id="genBtn" onclick="generate()">
+          <span id="genBtnTxt">Generate SQL ↗</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SQL editor -->
+    <div class="sql-block" id="sqlBlock" style="display:none">
+      <div class="block-hdr">
+        <span class="block-label">GENERATED SQL</span>
+        <div class="btn-row">
+          <button class="small-btn" onclick="copySQL()">Copy</button>
+          <button class="small-btn primary" id="runBtn" onclick="runQuery()">▶ Run Query</button>
+        </div>
+      </div>
+      <div class="sql-editor-wrap">
+        <textarea id="sqlEditor" class="sql-editor" spellcheck="false" rows="4"></textarea>
+      </div>
+      <div class="sql-hint">You can edit the query before running it</div>
+    </div>
+
+    <!-- Results -->
+    <div class="results-block" id="resultsBlock" style="display:none">
+      <div class="block-hdr">
+        <span class="block-label">RESULTS</span>
+        <span class="results-meta" id="resultsMeta"></span>
+      </div>
+      <div class="table-wrap">
+        <table id="resultsTable">
+          <thead id="tableHead"></thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div class="no-results" id="noResults" style="display:none">No rows returned.</div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-block" id="errorBlock" style="display:none">
+      <span class="err-icon">⚠️</span>
+      <span id="errorMsg"></span>
+    </div>
+
+    <!-- History -->
+    <div class="history-block" id="historyBlock" style="display:none">
+      <div class="panel-hdr">QUERY HISTORY</div>
+      <div id="historyList"></div>
+    </div>
+
+  </main>
+</div>
+
+<footer class="site-footer">
+  Built by <strong>Szymon Kloskowski</strong> ·
+  <a href="https://github.com/szmsk" target="_blank">github.com/szmsk</a> ·
+  Portfolio project: LLM API + SQL + Python Flask
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
